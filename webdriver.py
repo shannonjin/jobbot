@@ -9,6 +9,34 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 
+
+def greenhouse(driver):
+    driver.find_element(By.ID, 'first_name').send_keys("Shannon")
+    driver.find_element(By.ID, 'last_name').send_keys("Jin")
+    driver.find_element(By.ID, 'email').send_keys("sj2802@columbia.edu")
+    driver.find_element(By.ID, 'phone').send_keys("2405055041")
+    driver.find_element(By.ID, 'job_application_answers_attributes_0_text_value').send_keys(
+        'https://www.linkedin.com/in/shannon-jin-a7580178/')
+    driver.find_element(By.ID, 'job_application_answers_attributes_1_text_value').send_keys('https://github.com/shannonjin')
+    resume_file = '/Users/shannonj/Documents/JHS/new_generic_3/shannonJinResume.pdf'
+    driver.find_element(By.CSS_SELECTOR, "[aria-describedby='resume-allowable-file-types']").send_keys(resume_file)
+    driver.find_element(By.ID, "file-submit").click()
+
+    #wait = WebDriverWait(driver, 5)
+   # ele = wait.until(EC.presence_of_element_located((By.XPATH, '//input[@id="s3_upload_for_resume" and @type="file"]')))
+   # ele = wait.until(EC.presence_of_element_located((By.ID, "s3_upload_for_resume")))
+   # ele.send_keys(resume_file)
+    '''
+    try:
+        cover_letter_file = '/Users/shannonj/Documents/JHS/new_generic_3/shannonJinCoverLetter.pdf'
+        eli = wait.until(EC.presence_of_element_located((By.XPATH, '//input[@name="s3_upload_for_cover_letter" and @type="file"]')))
+        eli.send_keys(cover_letter_file)
+    except:
+        print('dang')
+    '''
+    time.sleep(100)
+
+
 driver = webdriver.Chrome()
 driver.get("https://linkedin.com")
 
@@ -19,7 +47,7 @@ driver.implicitly_wait(0.5)
 username = driver.find_element(By.XPATH, "//input[@name='session_key']")
 password = driver.find_element(By.XPATH, "//input[@name='session_password']")
 username.send_keys("sj2802@columbia.edu")
-password.send_keys("U7MT=22Tp-T%.UY")
+password.send_keys("")
 
 driver.find_element(By.XPATH, "//button[@type='submit']").click()
 driver.implicitly_wait(0.5)
@@ -45,25 +73,19 @@ while i < n:
         ActionChains(driver).double_click(jobs[i]).perform()
         driver.implicitly_wait(0.5)
         driver.switch_to.window(driver.window_handles[-1])
-        d1 = driver.find_element(By.CLASS_NAME, "jobs-search__job-details--wrapper")
-        d2 = d1.find_element(By.CLASS_NAME, "job-view-layout.jobs-details")
-        d3 = d2.find_element(By.CLASS_NAME, "t-14")
-        d4 = d3.find_element(By.CLASS_NAME, "mt5")
-        d5 = d4.find_element(By.CLASS_NAME, "display-flex")
-        d6 = d5.find_element(By.CLASS_NAME, "jobs-s-apply.jobs-s-apply--fadein.inline-flex.mr2")
-        driver.implicitly_wait(0.5)
         try:
-            #f.write("trying\n")
-            #d7 = d6.find_element(By.CLASS_NAME, "jobs-apply-button--top-card")
-           # d6.find_element(By.XPATH, "//button").click()
-            #button = d6.find_element(By.CLASS_NAME, "jobs-apply-button.artdeco-button.artdeco-button--icon-right.artdeco-button--3 artdeco-button--primary.ember-view")
-           # button.click()
-            WebDriverWait(driver, 3).until(
+            WebDriverWait(driver, 2).until(
                 EC.element_to_be_clickable((By.XPATH, "//span[normalize-space(.)='Apply']"))).click()
-            f.write('button clicked\n')
-            time.sleep(5)
+            driver.switch_to.window(driver.window_handles[1])
+            url = str(driver.current_url)
+            if 'greenhouse' in url:
+                greenhouse(driver)
+          #  elif 'lever' in url:
+            # #elif 'myworkdayjobs' in url:
+
+
+            time.sleep(100)
         except:
-            f.write('continue\n')
             continue
 
          #find_element(By.CSS_SELECTOR, "[href='#link-external-small']").click())
